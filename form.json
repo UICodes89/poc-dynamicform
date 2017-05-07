@@ -1,0 +1,56 @@
+{
+    "BuId" : "",
+    "accountID" : "",
+    "atPickupLocation" : "",
+    "name" : "",
+    "comapnayName" : "",
+    "phone" : "",
+    "locationId" : {
+        "address" : "",
+        "suburb" : "",
+        "postCode" : "",
+        "state" : "",
+        "country" : ""
+    },
+
+    "multipleItems" : true,
+    "pickupItems" : [
+      {
+        "itemType" : "",
+        "quatity" : "",
+        "dimension" : {
+          "height" : "",
+          "width" : "weight",
+          "length" : ""
+        },
+        "weight" : "",
+        "isPalletSpace" : false,
+        "paletSpace" : "",
+
+        "deliverLocation" : {
+          "isInternationAddr" : true,
+          "suburb" : "",
+          "postCode" : "",
+          "state" : "",
+          "country" : ""
+        },
+
+        "isDangerousGoods" : false,
+        "dgDetails" : [
+          {
+            "unCode" : "",
+            "elem1" : "",
+            "elem1" : ""
+          }
+        ],
+        
+        "hasFoodItems" : false
+      }
+    ],
+
+    "pickupDate" : "",
+    "availableTime" : "",
+    "locationClosingTime" : "",
+    "driverToBringConsignmentNotes" : true,
+    "specialInstrution" : ""
+}

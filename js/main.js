@@ -59,7 +59,7 @@ var App= App || {};
 	function buildElement(data){
 		//form element
 		$.each(data, function(key, value){
-          if(!this.length && !Object.keys(this).length){
+          if(typeof this !== "object"){
             var element,
             	div = divInline();
                 if(value === true || value === false){
@@ -81,7 +81,7 @@ var App= App || {};
             	 	div.find('label').append(key)
                 }
                 form.append(div);
-          }else if(this.length > 0){
+          }else if(typeof this == "object"){
           		var div = $("<div/>"),
           		p = $("<p/>");
           			div.addClass('col-sm-12 block-of-element');

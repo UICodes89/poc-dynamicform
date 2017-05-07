@@ -10,7 +10,7 @@ var App= App || {};
 
 	function getJson(){
      	var request = $.ajax({
-			  url: "form.json",
+			  url: "https://api.myjson.com/bins/j2cip",
 			  method: "GET",
 			  dataType: "json"
 			});
@@ -56,13 +56,20 @@ var App= App || {};
 		//create selectfield
 	}
 
-	function buildElement(data){
-		//form element
-		$.each(data, function(key, value){
-          if(typeof this !== "object"){
-            var element,
+	function stringType(key, value){
+			var element,
+            		div = divInline();
+                	element = createInput();
+                	element.name=key;
+                	div.append(element);
+            	 	div.find('label').append(key);            
+                	form.append(div);
+	}
+
+	function booleanType(key, value){
+       var element,
             	div = divInline();
-                if(value === true || value === false){
+                
                 	var radio1 = createRadio(key, value);
                 	var radio2 = createRadio(key, false);
                 	var span = $("<span/>");
@@ -74,45 +81,67 @@ var App= App || {};
                 	span1.append('No');
                 	span1.append(radio2);
                 	div.append(span1);
-                }else{
-                	element = createInput();
-                	element.name=key;
-                	div.append(element);
-            	 	div.find('label').append(key)
-                }
-                form.append(div);
-          }else if(typeof this == "object"){
-          		var div = $("<div/>"),
-          		p = $("<p/>");
-          			div.addClass('col-sm-12 block-of-element');
-          			p.append(key);
-          			div.append(p);
-          			form.append(div); 
-          			$.each(this[0], function(key, value){
-          				var element = createInput(),
-          					divNew = divInline();
-          					element.name=key; 
-		            	 	divNew.append(element);
-		            	 	divNew.find('label').append(key)
-			            	div.append(divNew);
+                	form.append(div);
+	}
 
+	function objectType(key, value, obj){
+		var div = $("<div/>"),
+      		p = $("<p/>");
+      			div.addClass('col-sm-12 block-of-element');
+      			p.append(key);
+      			div.append(p);
+      			form.append(div); 
+      			$.each(obj, function(key, value){
+      				var element = createInput(),
+      					divNew = divInline();
+      					element.name=key; 
+	            	 	divNew.append(element);
+	            	 	divNew.find('label').append(key)
+		            	div.append(divNew);
+		            	form.append(div);
+
+      			});
+	}
+
+	function arrayType(key, value, obj){
+		var div = $("<div/>"),
+			      		p = $("<p/>");
+			      			div.addClass('col-sm-12 block-of-element');
+			      			p.append(key);
+			      			div.append(p);
+			      			form.append(div);
+          	       var items = obj;
+          			$.each(items, function(key, value){
+          				if(typeof this === 'object'){
+          					buildElement(this);
+          				}else if(typeof this === "string"){
+ 							stringType(key, value);
+          				}else if(typeof value === "boolean"){
+          					booleanType(key, value);
+          				}else if(typeof this == "object" && !Array.isArray(this)){
+          					objectType(key, value, this);
+          				}else if(Array.isArray(obj)){
+          					arrayType(key, value, this);
+          				}
+			           
           			});
-          }else if(Object.keys(this).length > 0){
-          	var div = $("<div/>"),
-          		p = $("<p/>");
-          			div.addClass('col-sm-12 block-of-element');
-          			p.append(key);
-          			div.append(p);
-          			form.append(div); 
-          			$.each(this, function(key, value){
-          				var element = createInput(),
-          					divNew = divInline();
-          					element.name=key; 
-		            	 	divNew.append(element);
-		            	 	divNew.find('label').append(key)
-			            	div.append(divNew);
+	}
 
-          			});         			
+	function buildElement(data){
+		//form element
+		
+		$.each(data, function(key, value){
+			
+          if(typeof this === "string"){
+           		stringType(key, value);
+          }else if(typeof value === "boolean"){
+          	 booleanType(key, value);
+                
+          }else if(typeof this == "object" && !Array.isArray(this)){
+          		objectType(key, value, this);
+          }else if(Array.isArray(this)){
+          	      arrayType(key,value, this);     
+
            }
 		});
 		var buttonDiv = $("<div/>").addClass('col-sm-7')
